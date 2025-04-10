@@ -1,12 +1,12 @@
 <script>
-  // @ts-nocheck
-  import { MapPin } from 'lucide-svelte';
-  import { onMount } from 'svelte';
-  import { fade, fly, scale, slide } from 'svelte/transition';
-  import { backOut, elasticOut } from 'svelte/easing';
-  
-  // SVG components
-  const TypeScriptLogo = `<svg width="24" height="24" viewBox="0 0 225 225" fill="none" xmlns="http://www.w3.org/2000/svg">
+	// @ts-nocheck
+	import { MapPin } from 'lucide-svelte';
+	import { onMount } from 'svelte';
+	import { fade, fly, scale, slide } from 'svelte/transition';
+	import { backOut, elasticOut } from 'svelte/easing';
+
+	// SVG components
+	const TypeScriptLogo = `<svg width="24" height="24" viewBox="0 0 225 225" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clip-path="url(#clip0_19_18)">
       <path d="M0 112.5V225H225V0H0V112.5ZM181.308 103.528C187.024 104.955 191.377 107.522 195.405 111.656C197.459 113.85 200.531 117.879 200.791 118.87C200.862 119.166 191.088 125.719 185.154 129.382C184.936 129.53 184.057 128.616 183.101 127.181C180.211 122.97 177.166 121.141 172.519 120.811C165.705 120.368 161.311 123.926 161.346 129.895C161.311 131.358 161.641 132.827 162.295 134.107C163.8 137.222 166.62 139.085 175.331 142.861C191.447 149.78 198.33 154.357 202.612 160.84C207.408 168.089 208.47 179.663 205.249 188.304C201.663 197.641 192.797 204.012 180.345 206.1C176.498 206.796 167.344 206.684 163.202 205.917C154.16 204.307 145.589 199.835 140.316 193.978C138.227 191.707 134.198 185.737 134.459 185.337C134.571 185.189 135.485 184.605 136.512 184.015C137.538 183.424 141.307 181.23 144.865 179.177L151.348 175.409L152.705 177.42C154.61 180.309 158.745 184.268 161.241 185.583C168.42 189.394 178.27 188.845 183.143 184.486C185.119 182.841 186.223 180.309 186.075 177.75C186.075 175.148 185.745 173.981 184.388 172.034C182.63 169.545 179.079 167.421 168.933 163.027C157.324 158.006 152.304 154.934 147.769 149.991C144.914 146.728 142.791 142.889 141.581 138.748C140.737 135.562 140.52 127.575 141.18 124.39C143.564 113.147 152.058 105.349 164.25 103.043C168.209 102.277 177.434 102.565 181.315 103.521L181.308 103.528ZM128.503 112.943L128.573 122.133H99.2742V205.376H78.5461V122.133H49.2891V113.126C49.2891 108.105 49.4016 103.936 49.5422 103.823C49.6547 103.676 67.4508 103.605 89.0578 103.641L128.391 103.753L128.503 112.943Z" fill="#3178C6"/>
     </g>
@@ -16,20 +16,20 @@
       </clipPath>
     </defs>
   </svg>`;
-  
-  const GitHubLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full">
+
+	const GitHubLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full">
     <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
   </svg>`;
-  
-  const TailwindLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-full h-full">
+
+	const TailwindLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-full h-full">
     <path fill="#06B6D4" d="M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 C13.666,10.618,15.027,12,18.001,12c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 c1.177,1.194,2.538,2.576,5.512,2.576c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C10.337,13.382,8.976,12,6.001,12z"/>
   </svg>`;
-  
-  const VercelLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-full h-full">
+
+	const VercelLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-full h-full">
     <path fill="white" d="M12 2L2 19.7778H22L12 2Z"/>
   </svg>`;
-  
-  const ReactLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348" class="w-full h-full">
+
+	const ReactLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348" class="w-full h-full">
     <title>React Logo</title>
     <circle cx="0" cy="0" r="2.05" fill="#61dafb"/>
     <g stroke="#61dafb" stroke-width="1" fill="none">
@@ -38,8 +38,8 @@
       <ellipse rx="11" ry="4.2" transform="rotate(120)"/>
     </g>
   </svg>`;
-  
-  const GitLogo = `<svg width="24" height="24" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+	const GitLogo = `<svg width="24" height="24" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clip-path="url(#clip0_21_3)">
       <path d="M501.862 279.793L279.792 501.858C266.93 514.708 246.098 514.708 233.252 501.858L10.141 278.762C-2.713 265.911 -2.713 245.072 10.141 232.209L163.121 79.2351L221.054 137.177C215.114 151.406 217.902 168.41 229.49 179.988C233.277 183.787 237.643 186.623 242.309 188.532V328.83C237.643 330.743 233.27 333.596 229.49 337.372C214.193 352.667 214.193 377.443 229.49 392.755C244.771 408.051 269.564 408.051 284.863 392.755C300.158 377.443 300.158 352.667 284.863 337.372C281.753 334.278 278.234 331.816 274.505 329.97L274.509 190.96L327.335 243.786C321.509 257.96 324.353 274.86 335.856 286.371C351.164 301.675 375.944 301.675 391.248 286.371C406.543 271.072 406.543 246.292 391.248 230.999C380.303 220.037 364.492 216.984 350.79 221.706L294.15 165.067C298.879 151.36 295.805 135.566 284.864 124.613C273.977 113.725 258.318 110.632 244.658 115.244L185.891 56.4751L232.217 10.1421C245.073 -2.70995 265.913 -2.70995 278.75 10.1421L501.862 233.24C514.712 246.092 514.712 266.938 501.862 279.793Z" fill="#F1502F"/>
     </g>
@@ -49,8 +49,8 @@
       </clipPath>
     </defs>
   </svg>`;
-  
-  const SupabaseLogo = `<svg width="24" height="24" viewBox="0 0 109 113" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+	const SupabaseLogo = `<svg width="24" height="24" viewBox="0 0 109 113" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint0_linear)"/>
     <path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint1_linear)" fill-opacity="0.2"/>
     <path d="M45.317 2.07103C48.1765 -1.53037 53.9745 0.442937 54.0434 5.041L54.4849 72.2922H9.83113C1.64038 72.2922 -2.92775 62.8321 2.1655 56.4175L45.317 2.07103Z" fill="#3ECF8E"/>
@@ -65,8 +65,8 @@
       </linearGradient>
     </defs>
   </svg>`;
-  
-  const PostgreSQLLogo = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 118.53 122.88" class="w-full h-full">
+
+	const PostgreSQLLogo = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 118.53 122.88" class="w-full h-full">
     <style type="text/css">
       .st0{fill:#FFFFFF;}
       .st1{fill:#336791;}
@@ -86,9 +86,9 @@
       <path class="st0" d="M96.65,32.59c-0.05-1,0.72-1.85,1.72-1.9c1-0.05,1.85,0.72,1.9,1.72c0.15,2.8-0.19,5.02-0.55,7.35 c-0.27,1.74-0.55,3.56-0.61,5.59c-0.06,1.93,0.19,4.07,0.46,6.27c0.7,5.79,1.44,11.99-2.86,18.4c-0.56,0.83-1.68,1.05-2.51,0.5 c-0.83-0.56-1.05-1.68-0.5-2.51c3.54-5.29,2.88-10.8,2.26-15.96c-0.28-2.3-0.55-4.54-0.47-6.8c0.07-2.34,0.36-4.21,0.64-6.02 C96.47,37.05,96.78,34.99,96.65,32.59L96.65,32.59z"/>
     </g>
   </svg>`;
-  
-  // Add the GoLang logo SVG
-  const GoLangLogo = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 254.5 225" class="w-full h-full">
+
+	// Add the GoLang logo SVG
+	const GoLangLogo = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 254.5 225" class="w-full h-full">
     <style type="text/css">
       .st0{fill:#2DBCAF;}
       .st1{fill:#5DC9E1;}
@@ -133,471 +133,650 @@
       </g>
     </g>
   </svg>`;
-  
-  // Add the SvelteKit logo SVG
-  const SvelteKitLogo = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 98.1 118" class="w-full h-full" style="enable-background:new 0 0 98.1 118;">
+
+	// Add the SvelteKit logo SVG
+	const SvelteKitLogo = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 98.1 118" class="w-full h-full" style="enable-background:new 0 0 98.1 118;">
     <path fill="#FF3E00" d="M91.8,15.6C80.9-0.1,59.2-4.7,43.6,5.2L16.1,22.8C8.6,27.5,3.4,35.2,1.9,43.9c-1.3,7.3-0.2,14.8,3.3,21.3  c-2.4,3.6-4,7.6-4.7,11.8c-1.6,8.9,0.5,18.1,5.7,25.4c11,15.7,32.6,20.3,48.2,10.4l27.5-17.5c7.5-4.7,12.7-12.4,14.2-21.1  c1.3-7.3,0.2-14.8-3.3-21.3c2.4-3.6,4-7.6,4.7-11.8C99.2,32.1,97.1,22.9,91.8,15.6"/>
     <path fill="#FFFFFF" d="M40.9,103.9c-8.9,2.3-18.2-1.2-23.4-8.7c-3.2-4.4-4.4-9.9-3.5-15.3c0.2-0.9,0.4-1.7,0.6-2.6l0.5-1.6l1.4,1  c3.3,2.4,6.9,4.2,10.8,5.4l1,0.3l-0.1,1c-0.1,1.4,0.3,2.9,1.1,4.1c1.6,2.3,4.4,3.4,7.1,2.7c0.6-0.2,1.2-0.4,1.7-0.7L65.5,72  c1.4-0.9,2.3-2.2,2.6-3.8c0.3-1.6-0.1-3.3-1-4.6c-1.6-2.3-4.4-3.3-7.1-2.6c-0.6,0.2-1.2,0.4-1.7,0.7l-10.5,6.7  c-1.7,1.1-3.6,1.9-5.6,2.4c-8.9,2.3-18.2-1.2-23.4-8.7c-3.1-4.4-4.4-9.9-3.4-15.3c0.9-5.2,4.1-9.9,8.6-12.7l27.5-17.5  c1.7-1.1,3.6-1.9,5.6-2.5c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.2,0.9-0.4,1.7-0.7,2.6l-0.5,1.6l-1.4-1  c-3.3-2.4-6.9-4.2-10.8-5.4l-1-0.3l0.1-1c0.1-1.4-0.3-2.9-1.1-4.1c-1.6-2.3-4.4-3.3-7.1-2.6c-0.6,0.2-1.2,0.4-1.7,0.7L32.4,46.1  c-1.4,0.9-2.3,2.2-2.6,3.8s0.1,3.3,1,4.6c1.6,2.3,4.4,3.3,7.1,2.6c0.6-0.2,1.2-0.4,1.7-0.7l10.5-6.7c1.7-1.1,3.6-1.9,5.6-2.5  c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-27.5,17.5C44.8,102.5,42.9,103.3,40.9,103.9"/>
   </svg>`;
-  
-  // Navigation links
-  const navLinks = [
-    { icon: 'github', url: 'https://github.com/clamared', label: 'GitHub', svg: GitHubLogo },
-  ];
 
-  // Current technologies
-  const currentTechnologies = [
-    { name: 'GoLang', description: 'Programming language', icon: GoLangLogo, color: 'rgba(0, 173, 216, 0.2)' },
-    { name: 'TypeScript', description: 'JavaScript but less terrible', icon: TypeScriptLogo, color: 'rgba(49, 120, 198, 0.2)' },
-    { name: 'React', description: 'JavaScript Library', icon: ReactLogo, color: 'rgba(97, 218, 251, 0.2)' },
-    { name: 'SvelteKit', description: 'Svelte framework', icon: SvelteKitLogo, color: 'rgba(255, 62, 0, 0.2)' },
-    { name: 'Tailwind', description: 'CSS framework', icon: TailwindLogo, color: 'rgba(6, 182, 212, 0.2)' },
-    { name: 'Git', description: 'Version control', icon: GitLogo, color: 'rgba(240, 80, 50, 0.2)' },
-    { name: 'Supabase', description: 'Backend tool', icon: SupabaseLogo, color: 'rgba(62, 207, 142, 0.2)' },
-    { name: 'Postgres', description: 'Backend Database', icon: PostgreSQLLogo, color: 'rgba(240, 46, 101, 0.2)' }
-  ];
+	// Navigation links
+	const navLinks = [
+		{ icon: 'github', url: 'https://github.com/clamared', label: 'GitHub', svg: GitHubLogo }
+	];
 
-  // Other technologies
-  const otherTechnologies = [
-    { name: 'Typescript', icon: 'typescript', svg: TypeScriptLogo },
-    { name: 'GitHub', icon: 'github', svg: GitHubLogo },
-    { name: 'GitHub Actions', icon: 'github-actions' },
-    { name: 'AWS', icon: 'aws' },
-    { name: 'Vercel', icon: 'vercel', svg: VercelLogo },
-    { name: 'MySQL', icon: 'mysql' },
-    { name: 'SQLite', icon: 'sqlite' },
-    { name: 'Nginx', icon: 'nginx' }
-  ];
+	// Current technologies
+	const currentTechnologies = [
+		{
+			name: 'GoLang',
+			description: 'Programming language',
+			icon: GoLangLogo,
+			color: 'rgba(0, 173, 216, 0.2)'
+		},
+		{
+			name: 'TypeScript',
+			description: 'JavaScript but less terrible',
+			icon: TypeScriptLogo,
+			color: 'rgba(49, 120, 198, 0.2)'
+		},
+		{
+			name: 'React',
+			description: 'JavaScript Library',
+			icon: ReactLogo,
+			color: 'rgba(97, 218, 251, 0.2)'
+		},
+		{
+			name: 'SvelteKit',
+			description: 'Svelte framework',
+			icon: SvelteKitLogo,
+			color: 'rgba(255, 62, 0, 0.2)'
+		},
+		{
+			name: 'Tailwind',
+			description: 'CSS framework',
+			icon: TailwindLogo,
+			color: 'rgba(6, 182, 212, 0.2)'
+		},
+		{ name: 'Git', description: 'Version control', icon: GitLogo, color: 'rgba(240, 80, 50, 0.2)' },
+		{
+			name: 'Supabase',
+			description: 'Backend tool',
+			icon: SupabaseLogo,
+			color: 'rgba(62, 207, 142, 0.2)'
+		},
+		{
+			name: 'Postgres',
+			description: 'Backend Database',
+			icon: PostgreSQLLogo,
+			color: 'rgba(240, 46, 101, 0.2)'
+		}
+	];
 
-  // Animation control variables
-  let mounted = false;
-  let scrollY;
-  let innerHeight;
-  let sections = [];
-  let sectionElements = [];
-  
-  // Track scroll position for animations
-  onMount(() => {
-    setTimeout(() => {
-      mounted = true;
-    }, 100);
-    
-    // Get all section elements for scroll animations
-    sectionElements = document.querySelectorAll('section');
-    
-    // Initialize sections array with visibility status
-    sections = Array.from(sectionElements).map(() => false);
-    
-    // Check which sections are visible on scroll
-    function checkVisibility() {
-      sectionElements.forEach((section, index) => {
-        const rect = section.getBoundingClientRect();
-        const isVisible = (
-          rect.top <= innerHeight * 0.8 && 
-          rect.bottom >= innerHeight * 0.2
-        );
-        sections[index] = isVisible;
-      });
-      sections = [...sections]; // Trigger reactivity
-    }
-    
-    // Initial check
-    checkVisibility();
-    
-    // Add scroll event listener
-    window.addEventListener('scroll', checkVisibility);
-    
-    return () => {
-      window.removeEventListener('scroll', checkVisibility);
-    };
-  });
-  
-  // Function to stagger animations of children
-  function staggerChildren(node, { delay = 0, duration = 300, easing = backOut }) {
-    const children = Array.from(node.children);
-    
-    children.forEach((child, i) => {
-      const childDelay = delay + (i * 100);
-      
-      child.style.opacity = '0';
-      child.style.transform = 'translateY(20px)';
-      
-      setTimeout(() => {
-        child.style.transition = `opacity ${duration}ms ${easing}, transform ${duration}ms ${easing}`;
-        child.style.opacity = '1';
-        child.style.transform = 'translateY(0)';
-      }, childDelay);
-    });
-    
-    return {
-      destroy() {
-        // Cleanup if needed
-      }
-    };
-  }
+	// Other technologies
+	const otherTechnologies = [
+		{ name: 'Typescript', icon: 'typescript', svg: TypeScriptLogo },
+		{ name: 'GitHub', icon: 'github', svg: GitHubLogo },
+		{ name: 'GitHub Actions', icon: 'github-actions' },
+		{ name: 'AWS', icon: 'aws' },
+		{ name: 'Vercel', icon: 'vercel', svg: VercelLogo },
+		{ name: 'MySQL', icon: 'mysql' },
+		{ name: 'SQLite', icon: 'sqlite' },
+		{ name: 'Nginx', icon: 'nginx' }
+	];
+
+	// Animation control variables
+	let mounted = false;
+	let scrollY;
+	let innerHeight;
+	let sections = [];
+	let sectionElements = [];
+
+	// Track scroll position for animations
+	onMount(() => {
+		setTimeout(() => {
+			mounted = true;
+		}, 100);
+
+		// Get all section elements for scroll animations
+		sectionElements = document.querySelectorAll('section');
+
+		// Initialize sections array with visibility status
+		sections = Array.from(sectionElements).map(() => false);
+
+		// Check which sections are visible on scroll
+		function checkVisibility() {
+			sectionElements.forEach((section, index) => {
+				const rect = section.getBoundingClientRect();
+				const isVisible = rect.top <= innerHeight * 0.8 && rect.bottom >= innerHeight * 0.2;
+				sections[index] = isVisible;
+			});
+			sections = [...sections]; // Trigger reactivity
+		}
+
+		// Initial check
+		checkVisibility();
+
+		// Add scroll event listener
+		window.addEventListener('scroll', checkVisibility);
+
+		return () => {
+			window.removeEventListener('scroll', checkVisibility);
+		};
+	});
+
+	// Function to stagger animations of children
+	function staggerChildren(node, { delay = 0, duration = 300, easing = backOut }) {
+		const children = Array.from(node.children);
+
+		children.forEach((child, i) => {
+			const childDelay = delay + i * 100;
+
+			child.style.opacity = '0';
+			child.style.transform = 'translateY(20px)';
+
+			setTimeout(() => {
+				child.style.transition = `opacity ${duration}ms ${easing}, transform ${duration}ms ${easing}`;
+				child.style.opacity = '1';
+				child.style.transform = 'translateY(0)';
+			}, childDelay);
+		});
+
+		return {
+			destroy() {
+				// Cleanup if needed
+			}
+		};
+	}
 </script>
 
 <svelte:window bind:scrollY bind:innerHeight />
 
-<div class="bg-black text-white min-h-screen relative">
-  <!-- Background stars effect with parallax -->
-  <div 
-    class="stars-bg fixed inset-0 z-0" 
-    style="transform: translateY({scrollY * 0.1}px)"
-  ></div>
-  
-  <!-- Content container -->
-  <div class="relative z-10 container max-w-5xl mx-auto px-4 py-6">
-    <!-- Header with fade in animation -->
-    <header 
-      class="flex justify-between items-center mb-8 md:mb-12"
-      in:fade={{ duration: 800, delay: 200 }}
-    >
-      <div class="text-xl font-bold">Ethan Annane</div>
-      
-      <div class="flex space-x-2 md:space-x-4">
-        {#each navLinks as link, i}
-          {#if mounted}
-            <a 
-              href={link.url} 
-              class="p-2 md:p-3 bg-zinc-900 rounded-lg hover:bg-zinc-800 transition-all duration-300 hover:scale-110"
-              in:fly={{ y: -20, duration: 400, delay: 300 + (i * 100) }}
-            >
-              {#if link.svg}
-                <div class="w-5 h-5 md:w-6 md:h-6">
-                  {@html link.svg}
-                </div>
-              {:else}
-                <div class="w-5 h-5 md:w-6 md:h-6 icon-placeholder" data-icon="{link.icon}"></div>
-              {/if}
-            </a>
-          {/if}
-        {/each}
-      </div>
-    </header>
-    
-    <!-- Main intro section -->
-    <section class="grid grid-cols-1 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
-      {#if mounted}
-        <div 
-          class="col-span-1 lg:col-span-3 bg-zinc-900 rounded-lg p-4 md:p-6"
-          in:fly={{ x: -50, duration: 800, delay: 400 }}
-        >
-          <h1 class="text-2xl md:text-3xl font-bold mb-4">
-            Hello! <span class="wave-emoji">👋</span> My name is <span class="text-blue-500">Ethan Annane</span>.
-          </h1>
-          
-          <div class="flex items-center mb-4">
-            <div class="mr-2 w-4 h-4" data-icon="location"><MapPin size={16} /></div>
-            <p class="text-gray-400 text-sm md:text-base"> Bunbury, Western Australia.</p>
-          </div>
-          
-          <p class="mb-4 text-sm md:text-base">Hi! Im 13 and am a beginner full stack software developer.</p>
-          <p class="text-gray-300 text-sm md:text-base">I enjoy playing around with whatever cool ideas come to my mind, and building open source tools for myself, and others to enjoy!</p>
-        </div>
-        
-        <div 
-          class="col-span-1 bg-zinc-900 rounded-lg overflow-hidden"
-          in:scale={{ start: 0.8, duration: 800, delay: 600, easing: elasticOut }}
-        >
-          <!-- Profile photo -->
-          <img 
-            src="/me.png" 
-            alt="Ethan Annane" 
-            class="w-full h-full object-cover min-h-[200px] md:min-h-[300px]"
-          />
-        </div>
-      {/if}
-    </section>
-    
-    <!-- Current technologies section -->
-    <section class="mb-6 md:mb-8">
-      <div in:fade={{ duration: 400 }}>
-        <h2 class="text-lg md:text-xl font-bold mb-2">Current technologies</h2>
-        <p class="text-gray-400 text-xs md:text-sm mb-3 md:mb-4">I'm proficient in a range of modern technologies that empower me to build highly functional solutions. These are some of my main technologies.</p>
-      </div>
-      
-      <div 
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 md:gap-3"
-        use:staggerChildren={{ delay: 100 }}
-      >
-        {#each currentTechnologies as tech}
-          <div class="bg-zinc-900 p-2 md:p-3 rounded-lg flex items-start hover:bg-zinc-800 transition-all duration-300 hover:scale-105">
-            <div 
-              class="mr-2 md:mr-3 rounded-md p-1 flex items-center justify-center w-8 h-8 md:w-10 md:h-10" 
-              style="background-color: {tech.color}"
-            >
-              <div class="w-5 h-5 md:w-6 md:h-6">
-                {@html tech.icon}
-              </div>
-            </div>
-            <div>
-              <h3 class="font-medium text-sm md:text-base">{tech.name}</h3>
-              <p class="text-gray-400 text-xs">{tech.description}</p>
-            </div>
-          </div>
-        {/each}
-      </div>
-    </section>
-    
-    <!-- My Projects section -->
-    <section class="mb-8">
-      <div in:fade={{ duration: 400 }}>
-        <h2 class="text-lg md:text-xl font-bold mb-2">My Projects</h2>
-        <p class="text-gray-400 text-xs md:text-sm mb-4">Here are some of the projects I've built and am currently working on. Check them out!</p>
-      </div>
-      
-      <div 
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
-        use:staggerChildren={{ delay: 200 }}
-      >
-        <!-- Project Card 1 -->
-        <div class="bg-zinc-900 rounded-lg overflow-hidden flex flex-col h-full transform transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20">
-          <div class="h-48 bg-zinc-800 relative overflow-hidden">
-            <!-- Project image with hover effect -->
-            <img 
-              src="/aur.png" 
-              alt="AUR Project Screenshot" 
-              class="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-            />
-          </div>
-          <div class="p-4 flex-grow">
-            <h3 class="text-lg font-medium mb-2">Australian Unofficial Cubing Records</h3>
-            <p class="text-gray-400 text-sm mb-3">A modern at-home-cubing records tracker for my home country, Australia</p>
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="text-xs bg-blue-900/30 text-blue-400 px-2 py-1 rounded">TypeScript</span>
-              <span class="text-xs bg-purple-900/30 text-purple-400 px-2 py-1 rounded">Vercel</span>
-              <span class="text-xs bg-amber-900/30 text-amber-400 px-2 py-1 rounded">SvelteKit</span>
-              <span class="text-xs bg-green-900/30 text-green-400 px-2 py-1 rounded">Supabase</span>
-            </div>
-          </div>
-          <div class="p-4 pt-0 flex gap-3">
-            <a 
-              href="https://cubingunofficial.com/" 
-              class="text-sm text-blue-400 hover:text-blue-300 flex items-center transition-all duration-300 hover:translate-x-1"
-            >
-              <span class="mr-1">Demo</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
-          </div>
-        </div>
-        <div class="bg-zinc-900 rounded-lg overflow-hidden flex flex-col h-full transform transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20">
-          <div class="h-48 bg-zinc-800 relative overflow-hidden">
-            <!-- Project image with hover effect -->
-            <img 
-              src="/cog.webp" 
-              alt="DynoScript" 
-              class="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-            />
-          </div>
-          <div class="p-4 flex-grow">
-            <h3 class="text-lg font-medium mb-2">DynoScript</h3>
-            <p class="text-gray-400 text-sm mb-3">A unique esolang meant to be as configurable as possible, and adapt to your preferences. Just a cool interpreter project im working on.</p>
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="text-xs bg-blue-900/30 text-blue-400 px-2 py-1 rounded">GoLang</span>
-            </div>
-          </div>
-          <div class="p-4 pt-0 flex gap-3">
-            <a 
-              href="https://cubingunofficial.com/" 
-              class="text-sm text-blue-400 hover:text-blue-300 flex items-center transition-all duration-300 hover:translate-x-1"
-            >
-              <span class="mr-1">Demo</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
-          </div>
-        </div>
-        <div class="bg-zinc-900 rounded-lg overflow-hidden flex flex-col h-full transform transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20">
-          <div class="h-48 bg-zinc-800 relative overflow-hidden">
-            <!-- Project image with hover effect -->
-            <img 
-              src="/particle-life.png" 
-              alt="AUR Project Screenshot" 
-              class="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-            />
-          </div>
-          <div class="p-4 flex-grow">
-            <h3 class="text-lg font-medium mb-2">Particle Life</h3>
-            <p class="text-gray-400 text-sm mb-3">A simple engine for particle life built in go with Ebitengine. Super interesting small project, was a lot of fun.</p>
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="text-xs bg-blue-900/30 text-blue-400 px-2 py-1 rounded">GoLang</span>
-              <span class="text-xs bg-amber-900/30 text-amber-400 px-2 py-1 rounded">Ebitengine</span>
-            </div>
-          </div>
-          <div class="p-4 pt-0 flex gap-3">
-            <a 
-              href="https://cubingunofficial.com/" 
-              class="text-sm text-blue-400 hover:text-blue-300 flex items-center transition-all duration-300 hover:translate-x-1"
-            >
-              <span class="mr-1">Demo</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
-          </div>
-        </div>
-        
-        <!-- Project Cards 2 & 3 with similar animations -->
-        <!-- Other project cards follow the same pattern -->
-      </div>
-    </section>
-    
-    <!-- Contact Me section -->
-    <section class="mb-8 bg-zinc-900 rounded-lg p-6 shadow-lg" in:fade={{ duration: 800, delay: 200 }}>
-      <h2 class="text-lg md:text-xl font-bold mb-4">Contact Me</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" in:fade={{ duration: 800, delay: 200 }}>
-        <div>
-          <p class="text-gray-300 mb-4">Feel free to reach out if you have any questions or want to collaborate on a project! Heres a quick summary on the right if you want to just skip to the point.</p>
-          
-          <div class="flex flex-col space-y-3">
-            <a 
-              href="mailto:ethanannane@proton.me" 
-              class="flex items-center text-blue-400 hover:text-blue-300 transition-all duration-300 group"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              <span class="group-hover:translate-x-1 transition-transform duration-300">ethanannane@proton.me</span>
-            </a>
-            
-            <a 
-              href="https://github.com/clamared" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              class="flex items-center text-blue-400 hover:text-blue-300 transition-all duration-300 group"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-              </svg>
-              <span class="group-hover:translate-x-1 transition-transform duration-300">GitHub</span>
-            </a>
+<div class="relative min-h-screen bg-black text-white">
+	<!-- Background stars effect with parallax -->
+	<div class="stars-bg fixed inset-0 z-0" style="transform: translateY({scrollY * 0.1}px)"></div>
 
-          </div>
-        </div>
-        
-        <div class="bg-zinc-800 rounded-lg p-4">
-          <h3 class="text-md font-semibold mb-3">About Me</h3>
-          <p class="text-gray-300 mb-3">Full-stack developer with a love for building awesome stuff and performant applications.</p>
-          
-          <div class="space-y-2">
-            <div class="flex items-start">
-              <MapPin class="h-5 w-5 mr-2 text-gray-400 mt-0.5" />
-              <span class="text-gray-300">Bunbury, WA, Australia</span>
-            </div>
-            
-            <div class="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              <span class="text-gray-300">Not employed, not seeking</span>
-            </div>
-            
-            <div class="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-              <span class="text-gray-300">2 years of building cool things</span>
-            </div>
-          </div>
-          
-          <div class="mt-4 pt-4 border-t border-zinc-700">
-            <h4 class="text-sm font-medium mb-2">Connect with me:</h4>
-            <div class="flex space-x-3">
-              <a href="https://github.com/clamared" target="_blank" rel="noopener noreferrer" class="p-2 bg-zinc-700 rounded-full hover:bg-zinc-600 transition-colors duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-              </a>
-              <a href="mailto:ethanannane@proton.me" class="p-2 bg-zinc-700 rounded-full hover:bg-zinc-600 transition-colors duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-  </div>
+	<!-- Content container -->
+	<div class="relative z-10 container mx-auto max-w-5xl px-4 py-6">
+		<!-- Header with fade in animation -->
+		<header
+			class="mb-8 flex items-center justify-between md:mb-12"
+			in:fade={{ duration: 800, delay: 200 }}
+		>
+			<div class="text-xl font-bold">Ethan Annane</div>
+
+			<div class="flex space-x-2 md:space-x-4">
+				{#each navLinks as link, i}
+					{#if mounted}
+						<a
+							href={link.url}
+							class="rounded-lg bg-zinc-900 p-2 transition-all duration-300 hover:scale-110 hover:bg-zinc-800 md:p-3"
+							in:fly={{ y: -20, duration: 400, delay: 300 + i * 100 }}
+						>
+							{#if link.svg}
+								<div class="h-5 w-5 md:h-6 md:w-6">
+									{@html link.svg}
+								</div>
+							{:else}
+								<div class="icon-placeholder h-5 w-5 md:h-6 md:w-6" data-icon={link.icon}></div>
+							{/if}
+						</a>
+					{/if}
+				{/each}
+			</div>
+		</header>
+
+		<!-- Main intro section -->
+		<section class="mb-6 grid grid-cols-1 gap-4 md:mb-8 md:gap-6 lg:grid-cols-4">
+			{#if mounted}
+				<div
+					class="col-span-1 rounded-lg bg-zinc-900 p-4 md:p-6 lg:col-span-3"
+					in:fly={{ x: -50, duration: 800, delay: 400 }}
+				>
+					<h1 class="mb-4 text-2xl font-bold md:text-3xl">
+						Hello! <span class="wave-emoji">👋</span> My name is
+						<span class="text-blue-500">Ethan Annane</span>.
+					</h1>
+
+					<div class="mb-4 flex items-center">
+						<div class="mr-2 h-4 w-4" data-icon="location"><MapPin size={16} /></div>
+						<p class="text-sm text-gray-400 md:text-base">Bunbury, Western Australia.</p>
+					</div>
+
+					<p class="mb-4 text-sm md:text-base">
+						Hi! Im 13 and am a beginner full stack software developer.
+					</p>
+					<p class="text-sm text-gray-300 md:text-base">
+						I enjoy playing around with whatever cool ideas come to my mind, and building open
+						source tools for myself, and others to enjoy!
+					</p>
+				</div>
+
+				<div
+					class="col-span-1 overflow-hidden rounded-lg bg-zinc-900"
+					in:scale={{ start: 0.8, duration: 800, delay: 600, easing: elasticOut }}
+				>
+					<!-- Profile photo -->
+					<img
+						src="/me.png"
+						alt="Ethan Annane"
+						class="h-full min-h-[200px] w-full object-cover md:min-h-[300px]"
+					/>
+				</div>
+			{/if}
+		</section>
+
+		<!-- Current technologies section -->
+		<section class="mb-6 md:mb-8">
+			<div in:fade={{ duration: 400 }}>
+				<h2 class="mb-2 text-lg font-bold md:text-xl">Current technologies</h2>
+				<p class="mb-3 text-xs text-gray-400 md:mb-4 md:text-sm">
+					I'm proficient in a range of modern technologies that empower me to build highly
+					functional solutions. These are some of my main technologies.
+				</p>
+			</div>
+
+			<div
+				class="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-4 md:gap-3"
+				use:staggerChildren={{ delay: 100 }}
+			>
+				{#each currentTechnologies as tech}
+					<div
+						class="flex items-start rounded-lg bg-zinc-900 p-2 transition-all duration-300 hover:scale-105 hover:bg-zinc-800 md:p-3"
+					>
+						<div
+							class="mr-2 flex h-8 w-8 items-center justify-center rounded-md p-1 md:mr-3 md:h-10 md:w-10"
+							style="background-color: {tech.color}"
+						>
+							<div class="h-5 w-5 md:h-6 md:w-6">
+								{@html tech.icon}
+							</div>
+						</div>
+						<div>
+							<h3 class="text-sm font-medium md:text-base">{tech.name}</h3>
+							<p class="text-xs text-gray-400">{tech.description}</p>
+						</div>
+					</div>
+				{/each}
+			</div>
+		</section>
+
+		<!-- My Projects section -->
+		<section class="mb-8">
+			<div in:fade={{ duration: 400 }}>
+				<h2 class="mb-2 text-lg font-bold md:text-xl">My Projects</h2>
+				<p class="mb-4 text-xs text-gray-400 md:text-sm">
+					Here are some of the projects I've built and am currently working on. Check them out!
+				</p>
+			</div>
+
+			<div
+				class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+				use:staggerChildren={{ delay: 200 }}
+			>
+				<!-- Project Card 1 -->
+				<div
+					class="flex h-full transform flex-col overflow-hidden rounded-lg bg-zinc-900 transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
+				>
+					<div class="relative h-48 overflow-hidden bg-zinc-800">
+						<!-- Project image with hover effect -->
+						<img
+							src="/aur.png"
+							alt="AUR Project Screenshot"
+							class="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
+						/>
+					</div>
+					<div class="flex-grow p-4">
+						<h3 class="mb-2 text-lg font-medium">Australian Unofficial Cubing Records</h3>
+						<p class="mb-3 text-sm text-gray-400">
+							A modern at-home-cubing records tracker for my home country, Australia
+						</p>
+						<div class="mb-4 flex flex-wrap gap-2">
+							<span class="rounded bg-blue-900/30 px-2 py-1 text-xs text-blue-400">TypeScript</span>
+							<span class="rounded bg-purple-900/30 px-2 py-1 text-xs text-purple-400">Vercel</span>
+							<span class="rounded bg-amber-900/30 px-2 py-1 text-xs text-amber-400">SvelteKit</span
+							>
+							<span class="rounded bg-green-900/30 px-2 py-1 text-xs text-green-400">Supabase</span>
+						</div>
+					</div>
+					<div class="flex gap-3 p-4 pt-0">
+						<a
+							href="https://cubingunofficial.com/"
+							class="flex items-center text-sm text-blue-400 transition-all duration-300 hover:translate-x-1 hover:text-blue-300"
+						>
+							<span class="mr-1">Demo</span>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-4 w-4"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+								/>
+							</svg>
+						</a>
+					</div>
+				</div>
+				<div
+					class="flex h-full transform flex-col overflow-hidden rounded-lg bg-zinc-900 transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
+				>
+					<div class="relative h-48 overflow-hidden bg-zinc-800">
+						<!-- Project image with hover effect -->
+						<img
+							src="/cog.webp"
+							alt="DynoScript"
+							class="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
+						/>
+					</div>
+					<div class="flex-grow p-4">
+						<h3 class="mb-2 text-lg font-medium">DynoScript</h3>
+						<p class="mb-3 text-sm text-gray-400">
+							A unique esolang meant to be as configurable as possible, and adapt to your
+							preferences. Just a cool interpreter project im working on.
+						</p>
+						<div class="mb-4 flex flex-wrap gap-2">
+							<span class="rounded bg-blue-900/30 px-2 py-1 text-xs text-blue-400">GoLang</span>
+						</div>
+					</div>
+					<div class="flex gap-3 p-4 pt-0"></div>
+				</div>
+				<div
+					class="flex h-full transform flex-col overflow-hidden rounded-lg bg-zinc-900 transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
+				>
+					<div class="relative h-48 overflow-hidden bg-zinc-800">
+						<!-- Project image with hover effect -->
+						<img
+							src="/particle-life.png"
+							alt="AUR Project Screenshot"
+							class="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
+						/>
+					</div>
+					<div class="flex-grow p-4">
+						<h3 class="mb-2 text-lg font-medium">Particle Life</h3>
+						<p class="mb-3 text-sm text-gray-400">
+							A simple engine for particle life built in go with Ebitengine. Super interesting small
+							project, was a lot of fun.
+						</p>
+						<div class="mb-4 flex flex-wrap gap-2">
+							<span class="rounded bg-blue-900/30 px-2 py-1 text-xs text-blue-400">GoLang</span>
+							<span class="rounded bg-amber-900/30 px-2 py-1 text-xs text-amber-400"
+								>Ebitengine</span
+							>
+						</div>
+					</div>
+					<div class="flex gap-3 p-4 pt-0">
+						<a
+							href="https://github.com/cylicone/go-particle-life-simulation"
+							class="flex items-center text-sm text-blue-400 transition-all duration-300 hover:translate-x-1 hover:text-blue-300"
+						>
+							<span class="mr-1">Code</span>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-4 w-4"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+								/>
+							</svg>
+						</a>
+					</div>
+				</div>
+
+				<!-- Project Cards 2 & 3 with similar animations -->
+				<!-- Other project cards follow the same pattern -->
+			</div>
+		</section>
+
+		<!-- Contact Me section -->
+		<section
+			class="mb-8 rounded-lg bg-zinc-900 p-6 shadow-lg"
+			in:fade={{ duration: 800, delay: 200 }}
+		>
+			<h2 class="mb-4 text-lg font-bold md:text-xl">Contact Me</h2>
+
+			<div class="grid grid-cols-1 gap-6 md:grid-cols-2" in:fade={{ duration: 800, delay: 200 }}>
+				<div>
+					<p class="mb-4 text-gray-300">
+						Feel free to reach out if you have any questions or want to collaborate on a project!
+						Heres a quick summary on the right if you want to just skip to the point.
+					</p>
+
+					<div class="flex flex-col space-y-3">
+						<a
+							href="mailto:ethanannane@proton.me"
+							class="group flex items-center text-blue-400 transition-all duration-300 hover:text-blue-300"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="mr-3 h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+								/>
+							</svg>
+							<span class="transition-transform duration-300 group-hover:translate-x-1"
+								>ethanannane@proton.me</span
+							>
+						</a>
+
+						<a
+							href="https://github.com/clamared"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="group flex items-center text-blue-400 transition-all duration-300 hover:text-blue-300"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="mr-3 h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+								></path>
+							</svg>
+							<span class="transition-transform duration-300 group-hover:translate-x-1">GitHub</span
+							>
+						</a>
+					</div>
+				</div>
+
+				<div class="rounded-lg bg-zinc-800 p-4">
+					<h3 class="text-md mb-3 font-semibold">About Me</h3>
+					<p class="mb-3 text-gray-300">
+						Full-stack developer with a love for building awesome stuff and performant applications.
+					</p>
+
+					<div class="space-y-2">
+						<div class="flex items-start">
+							<MapPin class="mt-0.5 mr-2 h-5 w-5 text-gray-400" />
+							<span class="text-gray-300">Bunbury, WA, Australia</span>
+						</div>
+
+						<div class="flex items-center">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="mr-2 h-5 w-5 text-gray-400"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+								/>
+							</svg>
+							<span class="text-gray-300">Not employed, not seeking</span>
+						</div>
+
+						<div class="flex items-center">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="mr-2 h-5 w-5 text-gray-400"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+								/>
+							</svg>
+							<span class="text-gray-300">2 years of building cool things</span>
+						</div>
+					</div>
+
+					<div class="mt-4 border-t border-zinc-700 pt-4">
+						<h4 class="mb-2 text-sm font-medium">Connect with me:</h4>
+						<div class="flex space-x-3">
+							<a
+								href="https://github.com/clamared"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="rounded-full bg-zinc-700 p-2 transition-colors duration-300 hover:bg-zinc-600"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-5 w-5 text-gray-300"
+									fill="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+									/>
+								</svg>
+							</a>
+							<a
+								href="mailto:ethanannane@proton.me"
+								class="rounded-full bg-zinc-700 p-2 transition-colors duration-300 hover:bg-zinc-600"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-5 w-5 text-gray-300"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+									/>
+								</svg>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
 </div>
 
 <style>
-  /* Enhanced stars background with animation */
-  .stars-bg {
-    background-color: #000;
-    background-image: 
-      radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 2px),
-      radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 1px);
-    background-size: 50px 50px, 30px 30px;
-    background-position: 0 0, 25px 25px;
-    opacity: 0.1;
-    transition: transform 0.5s ease-out;
-  }
-  
-  /* Animated placeholder styles for icons */
-  .icon-placeholder {
-    border: 1px dashed #666;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    color: #999;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .icon-placeholder::after {
-    content: attr(data-icon);
-    position: absolute;
-  }
-  
-  .icon-placeholder::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    animation: shine 2s infinite;
-  }
-  
-  @keyframes shine {
-    0% { left: -100%; }
-    20% { left: 100%; }
-    100% { left: 100%; }
-  }
-  
-  /* Enhanced wave animation */
-  .wave-emoji {
-    display: inline-block;
-    animation: wave 2.5s infinite;
-    transform-origin: 70% 70%;
-    filter: drop-shadow(0 0 1px rgba(59, 130, 246, 0.5));
-  }
-  
-  @keyframes wave {
-    0% { transform: rotate( 0.0deg); }
-    10% { transform: rotate(14.0deg); }
-    20% { transform: rotate(-8.0deg); }
-    30% { transform: rotate(14.0deg); }
-    40% { transform: rotate(-4.0deg); }
-    50% { transform: rotate(10.0deg); }
-    60% { transform: rotate( 0.0deg); }
-    100% { transform: rotate( 0.0deg); }
-  }
-  
-  /* Add a subtle pulse animation to tech icons */
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-  }
+	/* Enhanced stars background with animation */
+	.stars-bg {
+		background-color: #000;
+		background-image:
+			radial-gradient(white, rgba(255, 255, 255, 0.2) 2px, transparent 2px),
+			radial-gradient(white, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+		background-size:
+			50px 50px,
+			30px 30px;
+		background-position:
+			0 0,
+			25px 25px;
+		opacity: 0.1;
+		transition: transform 0.5s ease-out;
+	}
+
+	/* Animated placeholder styles for icons */
+	.icon-placeholder {
+		border: 1px dashed #666;
+		border-radius: 4px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 10px;
+		color: #999;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.icon-placeholder::after {
+		content: attr(data-icon);
+		position: absolute;
+	}
+
+	.icon-placeholder::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+		animation: shine 2s infinite;
+	}
+
+	@keyframes shine {
+		0% {
+			left: -100%;
+		}
+		20% {
+			left: 100%;
+		}
+		100% {
+			left: 100%;
+		}
+	}
+
+	/* Enhanced wave animation */
+	.wave-emoji {
+		display: inline-block;
+		animation: wave 2.5s infinite;
+		transform-origin: 70% 70%;
+		filter: drop-shadow(0 0 1px rgba(59, 130, 246, 0.5));
+	}
+
+	@keyframes wave {
+		0% {
+			transform: rotate(0deg);
+		}
+		10% {
+			transform: rotate(14deg);
+		}
+		20% {
+			transform: rotate(-8deg);
+		}
+		30% {
+			transform: rotate(14deg);
+		}
+		40% {
+			transform: rotate(-4deg);
+		}
+		50% {
+			transform: rotate(10deg);
+		}
+		60% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(0deg);
+		}
+	}
+
+	/* Add a subtle pulse animation to tech icons */
+	@keyframes pulse {
+		0% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.05);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
 </style>
